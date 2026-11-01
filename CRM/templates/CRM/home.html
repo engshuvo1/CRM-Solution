@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'CRM/home.css' %}">
+    <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
+    <title>Student Management Software</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body class="d-flex flex-column min-vh-100">
+ 
+<div>
+  <nav class="navbar" style="background-color: #e3f2fd;">
+        <div class="container-fluid">
+          <a class="navbar-brand" href=""><i class="bi bi-mortarboard-fill fa-lg"></i>STUDENT INFORMATION</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="nav nav-underline nav nav-pills nav-fill justify-content-center">
+              <li class="nav-item">
+                <a class="nav-link active text-white" aria-current="page" href="{% url 'home' %}"><i class="bi bi-list-check fa-lg"></i></i>All Students</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-bolder-bold" href="{% url 'base' %}">
+                <i class="bi bi-plus-circle fa-lg"></i></i>Add Students</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">
+                <i class="fa-regular fa-user"></i>Login</a></li>
+              </li>
+              {% comment %} <li class="nav-item ">
+                <a class="nav-link" href="{% url 'registration' %}">
+                <i class="fa-regular fa-user"></i>Register</a></li>
+              </li> {% endcomment %}
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div>
+        
+{% block content %}
+<div class="container-fluid">
+  <h4 class="m-4">ALL STUDENTS</h4>
+  <form class='d-flex m-4 py-3 col-6 mx-auto' action="{% url 'student-search' %}" method="get">
+    <input class="form-control me-2" name="student-search" id="student-search" type="search" placeholder="Search information" aria-label="Search">
+    <button class="btn btn-outline-info btn-lg" type="submit">Search</button>
+  </form>
+</div>
+
+  <div class="row">
+  <div class="col-12">
+      <div class="card text-bg-light mb-4 ms-4 ">
+          <div class="card-body">
+          <h5 class="card-title text-danger">Student_Info:</h5>
+          <div class="table-responsive">
+              <table class="table table-light table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">STUDENT_ID</th>
+                      <th scope="col">STUDENT_NAME</th>
+                      <th scope="col">IMAGE_FIELD</th>
+                      <th scope="col">EMAIL_ADDRESS</th>
+                      <th class="text-center" scope="col">MOBILE_NUMBER</th>
+                      <th class="text-center" scope="col">FIELD_OF_STUDY</th>
+                      <th class="text-center" scope="col">GPA</th>
+                      <th class="text-center" scope="col">PASS_YEAR</th>
+                      <th class="text-center" scope="col">ACTION</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for student in page_obj %}
+                    <tr> 
+                      <td class="pt-5" >{{ student.student_Id }}</td>
+                      <td class="pt-5">{{ student.student_name }}</td>
+                      <td class="img-thumbnail"><img src="{{ student.image.url }}" style="width: 100px;" style="height: 120px;"></td>
+                      <td class="pt-5">{{ student.email }}</td>
+                      <td class="pt-5 text-center" >{{ student.Mobile_Number }}</td>
+                      <td class="pt-5 text-center" >{{ student.field_of_study }}</td>
+                      <td class="pt-5" >{{ student.gpa }}</td>
+                      <td class="pt-5 text-center" >{{ student.pass_year }}</td>
+
+                      <td class="py-5">
+                        <a class="btn btn-success me-1" href="{% url 'bannerDetails' student.pk %}">View</a>
+                        <a class="btn btn-warning me-1" href="{% url 'Editdetails' student.pk %}">Edit</a>
+                        <a class="btn btn-danger me-1" href="{% url 'detailsDelete' student.pk %}">Delete</a> 
+                  
+                    </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+              </table>
+          </div>
+          </div>
+        </div>
+       </div>
+    </div>
+ </div>
+
+
+
+{% endblock content %}
+
+ <div class="pagination">
+  <span class="step-links">
+      {% if page_obj.has_previous %}
+          <a href="?page=1">&laquo; first</a>
+          <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+      {% endif %}
+
+      <span class="current">
+         {{ page_obj.number }} {{ page_obj.paginator.num_pages }}
+      </span> 
+
+      {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}">next</a>
+          <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+      {% endif %}
+  </span>
+</div> 
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+</body>
+</html>
+

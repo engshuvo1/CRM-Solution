@@ -1,0 +1,61 @@
+{% extends "CRM/home.html" %}
+
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}          
+
+<div class="row">
+    <div class="col-12">
+        <div class="card text-bg-light mb-4 ms-4 ">
+            <div class="card-body">
+            <h5 class="card-title text-danger">Student_Info:</h5>
+            <div class="table-responsive">
+                <table class="table table-light table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">STUDENT_ID</th>
+                        <th scope="col">STUDENT_NAME</th>
+                        <th scope="col">IMAGE_FIELD</th>
+                        <th scope="col">EMAIL_ADDRESS</th>
+                        <th class="text-center" scope="col">MOBILE_NUMBER</th>
+                        <th class="text-center" scope="col">FIELD_OF_STUDY</th>
+                        <th class="text-center" scope="col">GPA</th>
+                        <th class="text-center" scope="col">PASS_YEAR</th>
+                        <th class="text-center" scope="col">ACTION</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for student in student %}
+                      <tr> 
+                        <td class="pt-5" >{{ student.student_Id }}</td>
+                        <td class="pt-5">{{ student.student_name }}</td>
+                        <td class="img-thumbnail"><img src="{{ student.image.url }}" style="width: 100px;" style="height: 120px;"></td>
+                        <td class="pt-5">{{ student.email }}</td>
+                        <td class="pt-5 text-center" >{{ student.Mobile_Number }}</td>
+                        <td class="pt-5 text-center" >{{ student.field_of_study }}</td>
+                        <td class="pt-5" >{{ student.gpa }}</td>
+                        <td class="pt-5 text-center" >{{ student.pass_year }}</td>
+  
+                        <td class="py-5">
+                          <a class="btn btn-success me-1" href="{% url 'bannerDetails' student.pk %}">View</a>
+                          <a class="btn btn-warning me-1" href="{% url 'Editdetails' student.pk %}">Edit</a>
+                          <a class="btn btn-danger me-1" href="{% url 'detailsDelete' student.pk %}">Delete</a> 
+                    
+                      </td>
+                      </tr>
+                      {% endfor %}
+  
+                  </tbody>
+                </table>
+            </div>
+            </div>
+          </div>
+         </div>
+      </div>
+   </div>
+
+
+
+{% endblock %}
